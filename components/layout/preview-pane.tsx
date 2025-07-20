@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
-import { Copy, Download, ChevronDown, Check } from "lucide-react";
+import { Copy, Download, Check } from "lucide-react";
 import React from "react";
 
 interface PreviewPaneProps {
@@ -14,7 +14,6 @@ interface PreviewPaneProps {
 
 export function PreviewPane({ markdown }: PreviewPaneProps) {
   const [viewMode, setViewMode] = useState<"rendered" | "html">("rendered");
-  const [template, setTemplate] = useState<"minimal" | "blog">("minimal");
   const [copied, setCopied] = useState(false);
 
   // Convert markdown to HTML string
@@ -51,17 +50,13 @@ export function PreviewPane({ markdown }: PreviewPaneProps) {
     }
   };
 
-  // Template-specific classes
+  // Template-specific classes - only minimal now
   const templateClasses = useMemo(() => {
     const baseClasses = "prose prose-gray max-w-none font-serif dark:prose-invert";
     
-    if (template === "blog") {
-      return `${baseClasses} prose-lg prose-headings:text-blue-900 dark:prose-headings:text-blue-300 prose-headings:font-bold prose-h1:text-4xl prose-h1:mb-8 prose-h2:text-3xl prose-h2:mb-6 prose-h3:text-2xl prose-h3:mb-4 prose-p:text-lg prose-p:leading-relaxed prose-p:mb-6 prose-ul:text-lg prose-ol:text-lg prose-blockquote:text-lg prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-950/20 prose-blockquote:p-4 prose-blockquote:rounded-lg prose-code:bg-blue-100 dark:prose-code:bg-blue-900 prose-pre:bg-blue-50 dark:prose-pre:bg-blue-900 prose-pre:border-blue-200 dark:prose-pre:border-blue-700 p-8 sm:p-12`;
-    }
-    
-    // Minimal template (default)
+    // Minimal template (only option)
     return `${baseClasses} prose-headings:font-serif prose-headings:font-semibold prose-h1:text-2xl prose-h1:mb-4 prose-h2:text-xl prose-h2:mb-3 prose-h3:text-lg prose-h3:mb-2 prose-p:mb-3 prose-p:leading-relaxed prose-ul:mb-3 prose-ol:mb-3 prose-li:mb-1 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-4 prose-blockquote:italic prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-pre:bg-gray-50 prose-pre:border prose-pre:rounded-lg prose-pre:p-3 prose-pre:overflow-x-auto dark:prose-code:bg-gray-800 dark:prose-pre:bg-gray-800 dark:prose-blockquote:border-gray-600 p-4 sm:p-6 sm:prose-h1:text-3xl sm:prose-h1:mb-6 sm:prose-h2:text-2xl sm:prose-h2:mb-4 sm:prose-h3:text-xl sm:prose-h3:mb-3 sm:prose-p:mb-4 sm:prose-ul:mb-4 sm:prose-ol:mb-4 sm:prose-pre:p-4`;
-  }, [template]);
+  }, []);
   
   // Download HTML as file
   const downloadHtml = async () => {
@@ -91,17 +86,6 @@ export function PreviewPane({ markdown }: PreviewPaneProps) {
             Preview
           </h2>
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <select
-                value={template}
-                onChange={(e) => setTemplate(e.target.value as "minimal" | "blog")}
-                className="appearance-none bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 pr-8 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="minimal">Minimal</option>
-                <option value="blog">Blog Post</option>
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-            </div>
             <div className="flex rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-1 text-xs sm:text-sm">
             <button
               onClick={() => setViewMode("rendered")}
